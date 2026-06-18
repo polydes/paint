@@ -1,0 +1,29 @@
+{
+  "group": "com.polydes",
+  "id": "com.polydes.paint",
+  "name": "Paint Extension",
+  "description": "Paint Extension.",
+  "tags": ["assets"],
+  "type": "normal",
+  "author": "Justin Espedal",
+  "website": "https://www.polydes.com/repo/toolset/com.polydes.paint",
+  "repository": "https://www.polydes.com/repo",
+  "target": "stencyl-4.2.0",
+  "version": "0.4.0",
+
+  "icon": "icon.png",
+
+  "toolset": {
+    "root": "toolset",
+    "src": [
+      {"type": "java", "path": "src"},
+      {"type": "res", "path": "res", "target": "res/com/polydes/paint"}
+    ],
+    "dependencies": [
+      "platform:ch.qos.reload4j:reload4j",
+      "platform:com.stencyl:jide-oss"
+    ],
+    "mainClass": "com.polydes.paint.PaintExtension",
+    "internalVersion": "2"
+  }
+}
