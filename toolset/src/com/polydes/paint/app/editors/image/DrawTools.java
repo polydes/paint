@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
 import com.polydes.paint.app.editors.image.tools.Brush;
 import com.polydes.paint.app.editors.image.tools.Bucket;
 import com.polydes.paint.app.editors.image.tools.Ellipse;
@@ -31,6 +29,8 @@ import com.polydes.paint.app.editors.image.tools.Pick;
 import com.polydes.paint.app.editors.image.tools.Rectangle;
 import com.polydes.paint.app.editors.image.tools.Select;
 import com.polydes.paint.app.editors.image.tools.Tool;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
 
 /*
  * Toolbar for image editing.
@@ -38,7 +38,7 @@ import com.polydes.paint.app.editors.image.tools.Tool;
 
 public class DrawTools extends JPanel implements KeyListener
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 	
 	public static Color BACKGROUND = Color.WHITE;
 	public static int BUTTON_WIDTH = 24;

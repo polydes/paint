@@ -1,25 +1,27 @@
 package com.polydes.paint.app.pages;
 
+import stencyl.app.api.nodes.HierarchyModelInterface;
+import stencyl.app.api.nodes.select.NodeSelection;
+import stencyl.app.api.nodes.select.NodeSelectionEvent;
+import stencyl.app.api.nodes.select.NodeSelectionListener;
+import stencyl.app.comp.MiniSplitPane;
+import stencyl.app.comp.darktree.DarkTree;
+import stencyl.core.api.pnodes.DefaultBranch;
+import stencyl.core.api.pnodes.DefaultLeaf;
+import stencyl.core.api.pnodes.HierarchyModel;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import com.polydes.common.comp.MiniSplitPane;
-import com.polydes.common.nodes.DefaultBranch;
-import com.polydes.common.nodes.DefaultLeaf;
-import com.polydes.common.nodes.HierarchyModel;
-import com.polydes.common.nodes.NodeSelection;
-import com.polydes.common.nodes.NodeSelectionEvent;
-import com.polydes.common.nodes.NodeSelectionListener;
-import com.polydes.common.ui.darktree.DarkTree;
-
-public class BasicPage extends JPanel implements NodeSelectionListener<DefaultLeaf,DefaultBranch>
+public class BasicPage extends JPanel implements NodeSelectionListener<DefaultLeaf, DefaultBranch>
 {
 	protected Boolean listEditEnabled;
 	
 	protected MiniSplitPane splitPane;
 	protected HierarchyModel<DefaultLeaf,DefaultBranch> folderModel;
+	protected HierarchyModelInterface<DefaultLeaf,DefaultBranch> folderModelInterface;
 	protected DarkTree<DefaultLeaf,DefaultBranch> tree;
 	
 	protected NodeSelection<DefaultLeaf,DefaultBranch> selection;
@@ -34,7 +36,8 @@ public class BasicPage extends JPanel implements NodeSelectionListener<DefaultLe
 		super(new BorderLayout());
 		
 		folderModel = new HierarchyModel<DefaultLeaf,DefaultBranch>(rootFolder, DefaultLeaf.class, DefaultBranch.class);
-		tree = new DarkTree<DefaultLeaf,DefaultBranch>(folderModel);
+		folderModelInterface = new HierarchyModelInterface<>(folderModel);
+		tree = new DarkTree<DefaultLeaf,DefaultBranch>(folderModelInterface);
 		
 		splitPane = new MiniSplitPane();
 		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
@@ -43,8 +46,8 @@ public class BasicPage extends JPanel implements NodeSelectionListener<DefaultLe
 		add(splitPane);
 		
 		splitPane.setDividerLocation(DarkTree.DEF_WIDTH);
-		
-		folderModel.getSelection().addSelectionListener(this);
+
+		tree.getSelectionState().addSelectionListener(this);
 		
 		tree.forceRerender();
 	}

@@ -15,23 +15,28 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
-import com.polydes.common.comp.StatusBar;
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
+import com.polydes.paint.PaintExtension.PaintManager;
 import com.polydes.paint.app.pages.FontsPage;
 import com.polydes.paint.app.pages.ImagesPage;
 
-import stencyl.sw.lnf.Theme;
+import com.polydes.paint.data.stores.FontStore;
+import com.polydes.paint.data.stores.Fonts;
+import com.polydes.paint.data.stores.ImageStore;
+import com.polydes.paint.data.stores.Images;
+import stencyl.app.comp.StatusBar;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
+import stencyl.app.lnf.Theme;
 
 public class MainEditor extends JPanel
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
-	
-	private static MainEditor _instance;
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 	
 	private static final int BUTTON_WIDTH = 70;
 	private static final int BUTTON_HEIGHT = 57;
-	
+
+	public final PaintManager manager;
+
 	private ButtonGroup buttonGroup;
 	private JToggleButton fontsButton;
 	private JToggleButton imagesButton;
@@ -39,15 +44,23 @@ public class MainEditor extends JPanel
 	private JPanel buttonBar;
 	private JPanel currentPage;
 	private JPanel blank;
+
+	private FontsPage fontsPage;
+	private ImagesPage imagesPage;
 	
 	public static final Color SIDEBAR_COLOR = new Color(62, 62, 62);
-	
-	private MainEditor()
+
+	public MainEditor(PaintManager manager)
 	{
 		super(new BorderLayout());
-		
+
+		this.manager = manager;
+
+		fontsPage = new FontsPage(manager.fonts);
+		imagesPage = new ImagesPage(manager.images);
+
 		add(createVerticalButtonBar(), BorderLayout.WEST);
-		
+
 		blank = new JPanel(new BorderLayout());
 		blank.setBackground(new Color(43, 43, 43));
 		blank.add(StatusBar.createStatusBar(), BorderLayout.SOUTH);
@@ -55,14 +68,6 @@ public class MainEditor extends JPanel
 		currentPage = blank;
 		
 		add(blank);
-	}
-	
-	public static MainEditor get()
-	{
-		if(_instance == null)
-			_instance = new MainEditor();
-		
-		return _instance;
 	}
 	
 	private JPanel createVerticalButtonBar()
@@ -163,12 +168,12 @@ public class MainEditor extends JPanel
 		
 		if(pageName.equals("Fonts"))
 		{
-			currentPage = FontsPage.get();			
+			currentPage = fontsPage;
 			fontsButton.setSelected(true);			
 		}
 		else if(pageName.equals("Images"))
 		{
-			currentPage = ImagesPage.get();
+			currentPage = imagesPage;
 			imagesButton.setSelected(true);
 		}
 		
@@ -178,12 +183,10 @@ public class MainEditor extends JPanel
 		repaint();
 	}
 	
-	public static void disposePages()
+	public void disposePages()
 	{
-		FontsPage.dispose();
-		ImagesPage.dispose();
-		
-		_instance = null;
+		fontsPage = null;
+		imagesPage = null;
 	}
 
 	public void gameSaved()

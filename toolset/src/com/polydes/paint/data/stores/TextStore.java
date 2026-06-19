@@ -3,14 +3,13 @@ package com.polydes.paint.data.stores;
 import java.io.File;
 import java.util.Stack;
 
-import com.polydes.common.nodes.DefaultBranch;
-import com.polydes.common.nodes.DefaultLeaf;
-import com.polydes.common.nodes.DefaultViewableBranch;
 import com.polydes.paint.data.LinkedDataItem;
 import com.polydes.paint.data.TextSource;
 import com.polydes.paint.io.Text;
+import stencyl.core.api.pnodes.DefaultBranch;
+import stencyl.core.api.pnodes.DefaultLeaf;
 
-public abstract class TextStore extends DefaultViewableBranch
+public abstract class TextStore extends DefaultBranch
 {
 	protected TextStore(String name)
 	{
@@ -35,7 +34,7 @@ public abstract class TextStore extends DefaultViewableBranch
 		{
 			if(foldersUsed && line.startsWith(folderStartMarker))
 			{
-				folderStack.push(new DefaultViewableBranch(line.substring(folderStartMarker.length())));
+				folderStack.push(new DefaultBranch(line.substring(folderStartMarker.length())));
 			}
 			else if(foldersUsed && line.startsWith(folderEndMarker))
 			{

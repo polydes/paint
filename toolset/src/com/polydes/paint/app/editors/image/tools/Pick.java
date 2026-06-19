@@ -3,8 +3,8 @@ package com.polydes.paint.app.editors.image.tools;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.polydes.common.comp.colors.ColorDisplay;
 import com.polydes.paint.app.editors.image.DrawArea;
+import stencyl.app.comp.colors.ColorDisplay;
 
 public class Pick implements Tool
 {

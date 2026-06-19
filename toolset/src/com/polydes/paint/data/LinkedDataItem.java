@@ -1,7 +1,7 @@
 package com.polydes.paint.data;
 
-import com.polydes.common.nodes.DefaultLeaf;
 import com.polydes.paint.app.editors.DataItemEditor;
+import stencyl.core.api.pnodes.DefaultLeaf;
 
 /*
  * DefaultLeaf that is linked to a data editor.

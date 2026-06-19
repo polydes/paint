@@ -13,12 +13,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.polydes.paint.data.BitmapFont;
-
-import stencyl.sw.loc.LanguagePack;
-import stencyl.sw.util.Util;
-import stencyl.sw.util.comp.ButtonBarFactory;
-import stencyl.sw.util.comp.GroupButton;
-import stencyl.sw.util.dg.StencylDialog;
+import stencyl.app.comp.ButtonBarFactory;
+import stencyl.app.comp.GroupButton;
+import stencyl.app.comp.dg.StencylDialog;
+import stencyl.core.loc.LanguagePack;
+import stencyl.core.util.OS;
 
 public final class PackGlyphsDialog extends StencylDialog
 {
@@ -62,7 +61,7 @@ public final class PackGlyphsDialog extends StencylDialog
 		
 		add(createContentPanel(), BorderLayout.CENTER);
 		
-		if(Util.isMacOSX())
+		if(OS.isMacOSXForStyling())
 		{
 			setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		}

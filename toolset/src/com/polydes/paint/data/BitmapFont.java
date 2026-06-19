@@ -12,11 +12,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import stencyl.core.api.Reference;
-import stencyl.core.lib.Resource;
-import stencyl.core.lib.io.AbstractReader;
-import stencyl.sw.util.FileHelper;
+import stencyl.core.io.FileHelper;
+import stencyl.core.io.XmlHelper;
 
 //http://www.angelcode.com/products/bmfont/doc/file_format.html
 public class BitmapFont extends LinkedDataItem
@@ -315,19 +312,9 @@ public class BitmapFont extends LinkedDataItem
 		e.setAttribute("chnl", "" + g.chnl);
 	}
 	
-	class R extends AbstractReader
+	class R extends XmlHelper
 	{
-		@Override
-		public boolean accepts(String arg0)
-		{
-			return false;
-		}
 
-		@Override
-		public Resource read(Reference arg0, String arg1, String arg2, Element arg3, HashMap<Integer, Integer> arg4)
-		{
-			return null;
-		}
 	}
 	
 	public static String join(int[] a)

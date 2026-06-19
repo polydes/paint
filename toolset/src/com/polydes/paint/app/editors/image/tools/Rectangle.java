@@ -8,15 +8,15 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
 import com.polydes.paint.app.editors.image.DrawArea;
 import com.polydes.paint.app.editors.image.ImageUtils;
 import com.polydes.paint.app.editors.image.ShapeUtils;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
 
 public class Rectangle implements Tool, ActionListener
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 	
 	private DrawArea area;
 	private Point beginPress;

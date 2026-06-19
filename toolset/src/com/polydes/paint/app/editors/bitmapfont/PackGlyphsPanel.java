@@ -17,13 +17,12 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.polydes.paint.data.BitmapFont;
-
-import stencyl.sw.lnf.Theme;
-import stencyl.sw.util.UI;
-import stencyl.sw.util.Util;
-import stencyl.sw.util.comp.text.AutoVerifyField;
-import stencyl.sw.util.comp.text.FieldVerifier;
-import stencyl.sw.util.dg.DialogPanel;
+import stencyl.app.comp.UI;
+import stencyl.app.comp.dg.DialogPanel;
+import stencyl.app.comp.text.AutoVerifyField;
+import stencyl.app.comp.text.FieldVerifier;
+import stencyl.app.lnf.Theme;
+import stencyl.core.util.OS;
 
 public final class PackGlyphsPanel extends JPanel implements ActionListener, FieldVerifier
 {    
@@ -94,7 +93,7 @@ public final class PackGlyphsPanel extends JPanel implements ActionListener, Fie
 
 		//---
 
-		if(Util.isMacOSX())
+		if(OS.isMacOSXForStyling())
 		{
 			setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		}
@@ -161,7 +160,7 @@ public final class PackGlyphsPanel extends JPanel implements ActionListener, Fie
 	{
 		DialogPanel panel = new DialogPanel(Theme.LIGHT_BG_COLOR);
 		
-		if(Util.isMacOSX())
+		if(OS.isMacOSXForStyling())
 		{
 			panel.finishBlock();
 		}

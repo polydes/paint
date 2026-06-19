@@ -3,15 +3,14 @@ package com.polydes.paint.data.stores;
 import java.io.File;
 import java.io.IOException;
 
-import com.polydes.common.nodes.DefaultBranch;
-import com.polydes.common.nodes.DefaultLeaf;
-import com.polydes.common.nodes.DefaultViewableBranch;
 import com.polydes.paint.data.ImageSource;
 import com.polydes.paint.data.LinkedDataItem;
 
-import stencyl.sw.util.FileHelper;
+import stencyl.core.api.pnodes.DefaultBranch;
+import stencyl.core.api.pnodes.DefaultLeaf;
+import stencyl.core.io.FileHelper;
 
-public abstract class ImageStore extends DefaultViewableBranch
+public abstract class ImageStore extends DefaultBranch
 {
 	protected ImageStore(String name)
 	{

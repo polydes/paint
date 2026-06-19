@@ -4,19 +4,9 @@ import java.io.File;
 
 public class Fonts extends FontStore
 {
-	private static Fonts _instance;
-	
-	private Fonts()
+	public Fonts()
 	{
 		super("Fonts");
-	}
-	
-	public static Fonts get()
-	{
-		if(_instance == null)
-			_instance = new Fonts();
-		
-		return _instance;
 	}
 	
 	@Override

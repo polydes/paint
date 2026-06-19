@@ -2,13 +2,12 @@ package com.polydes.paint.data.stores;
 
 import java.io.File;
 
-import com.polydes.common.nodes.DefaultBranch;
-import com.polydes.common.nodes.DefaultLeaf;
-import com.polydes.common.nodes.DefaultViewableBranch;
 import com.polydes.paint.data.BitmapFont;
 import com.polydes.paint.data.LinkedDataItem;
+import stencyl.core.api.pnodes.DefaultBranch;
+import stencyl.core.api.pnodes.DefaultLeaf;
 
-public abstract class FontStore extends DefaultViewableBranch
+public abstract class FontStore extends DefaultBranch
 {
 	protected FontStore(String name)
 	{

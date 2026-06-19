@@ -4,21 +4,11 @@ import java.io.File;
 
 public class Images extends ImageStore
 {
-	private static Images _instance;
-	
-	private Images()
+	public Images()
 	{
 		super("Images");
 	}
 
-	public static Images get()
-	{
-		if(_instance == null)
-			_instance = new Images();
-		
-		return _instance;
-	}
-	
 	@Override
 	public void load(File file)
 	{

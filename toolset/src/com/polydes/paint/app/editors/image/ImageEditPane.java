@@ -18,15 +18,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.polydes.common.comp.StatusBar;
-import com.polydes.common.comp.colors.ColorDialog;
-import com.polydes.common.comp.colors.ColorDisplay;
 import com.polydes.paint.app.editors.image.tools.Hand;
 import com.polydes.paint.app.editors.image.tools.Pick;
 import com.polydes.paint.app.editors.image.tools.Select;
 import com.polydes.paint.app.editors.image.tools.ToolOptions;
-
-import stencyl.sw.util.UI;
+import stencyl.app.comp.StatusBar;
+import stencyl.app.comp.UI;
+import stencyl.app.comp.colors.ColorDialog;
+import stencyl.app.comp.colors.ColorDisplay;
 
 public class ImageEditPane extends JPanel
 {
@@ -63,7 +62,7 @@ public class ImageEditPane extends JPanel
 		sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 		sidebar.add(toolbar);
 		sidebar.add(Box.createRigidArea(new Dimension(20, 15)));
-		sidebar.add(colorDisplay = new ColorDisplay(15, 15, Color.BLACK, null));
+		sidebar.add(colorDisplay = new ColorDisplay(15, 15, Color.BLACK));
 		sidebar.add(Box.createRigidArea(new Dimension(20, 15)));
 		
 		colorDialog = new ColorDialog(colorDisplay, null);

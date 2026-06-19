@@ -17,18 +17,18 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
 import com.polydes.paint.app.editors.bitmapfont.FontDrawArea;
 import com.polydes.paint.app.editors.image.DrawArea;
 import com.polydes.paint.app.editors.image.tools.Tool;
 import com.polydes.paint.app.editors.image.tools.ToolOptions;
 import com.polydes.paint.data.BitmapFont;
 import com.polydes.paint.data.BitmapGlyph;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
 
 public class LineSpacing implements Tool, MouseListener, MouseMotionListener
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 	
 	public static final float TRANSPARENCY = .2f;
 	public static final Color SELECT_COLOR = Color.ORANGE;

@@ -5,20 +5,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
 import com.polydes.paint.app.editors.bitmapfont.tools.GlyphBounds;
 import com.polydes.paint.app.editors.bitmapfont.tools.GlyphSpacing;
 import com.polydes.paint.app.editors.bitmapfont.tools.LineSpacing;
 import com.polydes.paint.app.editors.image.DrawTools;
 import com.polydes.paint.data.BitmapFont;
 
-import stencyl.sw.SW;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
+import stencyl.app.main.MainWindow;
 
 @SuppressWarnings("serial")
 public class FontTools extends DrawTools
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 	
 	private ToolButton glyphBoundsButton;
 	private ToolButton glyphSpacingButton;
@@ -40,7 +40,7 @@ public class FontTools extends DrawTools
 			{
 				FontDrawArea area = (FontDrawArea) getDrawArea();
 				BitmapFont font = area.font;
-				PackGlyphsDialog.showPackGlyphsDialog(font, area, SW.get());
+				PackGlyphsDialog.showPackGlyphsDialog(font, area, MainWindow.get());
 			}
 		});
 		

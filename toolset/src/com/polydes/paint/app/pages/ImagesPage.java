@@ -4,26 +4,11 @@ import com.polydes.paint.data.stores.Images;
 
 public class ImagesPage extends ImageSourcePage
 {
-	private static ImagesPage _instance;
-	
-	protected ImagesPage()
+	public ImagesPage(Images images)
 	{
-		super(Images.get());
+		super(images);
 		
 		setListEditEnabled(true);
 		folderModel.setUniqueLeafNames(true);
-	}
-	
-	public static ImagesPage get()
-	{
-		if (_instance == null)
-			_instance = new ImagesPage();
-
-		return _instance;
-	}
-
-	public static void dispose()
-	{
-		_instance = null;
 	}
 }

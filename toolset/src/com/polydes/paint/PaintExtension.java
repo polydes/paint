@@ -4,70 +4,157 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.polydes.common.res.ResourceLoader;
-import com.polydes.common.res.Resources;
 import com.polydes.paint.app.MainEditor;
 import com.polydes.paint.data.stores.Fonts;
 import com.polydes.paint.data.stores.Images;
+import stencyl.app.ext.PageAddon;
+import stencyl.app.ext.PageAddon.ExtensionPageAddon;
+import stencyl.app.ext.res.AppResourceLoader;
+import stencyl.app.ext.res.AppResources;
+import stencyl.core.ext.addon.AddonContributor;
+import stencyl.core.ext.app.AppExtension;
+import stencyl.core.io.FileHelper;
+import stencyl.core.lib.IProject;
+import stencyl.core.lib.ProjectManager;
+import stencyl.sw.app.center.GameLibrary;
 
-import stencyl.core.lib.Game;
-import stencyl.sw.ext.BaseExtension;
-import stencyl.sw.ext.OptionsPanel;
-import stencyl.sw.util.FileHelper;
-import stencyl.sw.util.Locations;
-
-public class PaintExtension extends BaseExtension
+public class PaintExtension extends AppExtension
 {
-	private static Resources res = ResourceLoader.getResources("com.polydes.paint");
-	private static PaintExtension _instance;
+	private static AppResources res = AppResourceLoader.getResources("com.polydes.paint");
 
-	private File extras;
-	private File fontsFile;
-	private File imagesFile;
+	public static class PaintManager
+	{
+		private final IProject project;
+
+		private final String extrasDir;
+		private final File fontsFile;
+		private final File imagesFile;
+
+		public final Fonts fonts;
+		public final Images images;
+		private MainEditor mainEditor;
+
+		private AddonContributor projectAddons;
+
+		public PaintManager(IProject project)
+		{
+			this.project = project;
+
+			String extensionId = PaintExtension.get().getInfo().getID();
+
+			extrasDir = project.getLocation("extras", extensionId);
+			File extrasFile = new File(extrasDir);
+
+			if(!extrasFile.exists())
+				extrasFile.mkdir();
+
+			fonts = new Fonts();
+			images = new Images();
+
+			if(extrasFile.list().length == 0)
+				loadDefaults(extrasFile);
+
+			fontsFile = new File(extrasFile, "fonts");
+			imagesFile = new File(extrasFile, "images");
+
+			fonts.load(fontsFile);
+			images.load(imagesFile);
+
+			projectAddons = new AddonContributor(_instance.getAddons().getAddonContributorId());
+
+			PageAddon paintSidebarPage = new ExtensionPageAddon(PaintExtension.get())
+			{
+				@Override
+				public JPanel getPage()
+				{
+					return getEditor();
+				}
+			};
+
+			projectAddons.setAddon(GameLibrary.DASHBOARD_SIDEBAR_PAGE_ADDONS, paintSidebarPage);
+
+			project.getAddonManager().addDataForContributor(projectAddons);
+		}
+
+		public MainEditor getEditor()
+		{
+			if(mainEditor == null)
+				mainEditor = new MainEditor(this);
+			return mainEditor;
+		}
+
+		public void save()
+		{
+			fonts.saveChanges(fontsFile);
+			images.saveChanges(imagesFile);
+
+			if(mainEditor != null)
+				mainEditor.gameSaved();
+		}
+
+		public void close()
+		{
+			project.getAddonManager().removeDataForContributor(projectAddons);
+			if(mainEditor != null)
+				mainEditor.disposePages();
+			fonts.unload();
+			images.unload();
+		}
+	}
+
+	private Map<IProject, PaintManager> projectPaintManager = new HashMap<>();
+
+	private static PaintExtension _instance;
 
 	public static PaintExtension get()
 	{
 		return _instance;
 	}
 
-	/*
-	 * Happens when StencylWorks launches.
-	 * 
-	 * Avoid doing anything time-intensive in here, or it will slow down launch.
-	 */
 	@Override
-	public void onStartup()
-	{
-		super.onStartup();
-		
+	public void onLoad() {
+		super.onLoad();
+
 		_instance = this;
 
-		isInMenu = true;
-		menuName = "Paint Extension";
-
-		isInGameCenter = true;
-		gameCenterName = "Paint Extension";
-	}
-
-	/*
-	 * Happens when the extension is told to display.
-	 * 
-	 * May happen multiple times during the course of the app.
-	 * 
-	 * A good way to handle this is to make your extension a singleton.
-	 */
-	@Override
-	public void onActivate()
-	{
+		for(IProject project : ProjectManager.getOpenedProjects())
+		{
+			projectPaintManager.put(project, new PaintManager(project));
+		}
 	}
 
 	@Override
-	public JPanel onGameCenterActivate()
-	{
-		return MainEditor.get();
+	public void onUnload() {
+		super.onUnload();
+
+		for(IProject project : ProjectManager.getOpenedProjects())
+		{
+			projectPaintManager.remove(project).close();
+		}
+	}
+
+	@Override
+	public void onGameSave(IProject project) {
+		var manager = projectPaintManager.get(project);
+		if(manager != null)
+			manager.save();
+	}
+
+	@Override
+	public void onGameOpened(IProject project) {
+		projectPaintManager.put(project, new PaintManager(project));
+	}
+
+	@Override
+	public void onGameClosed(IProject project) {
+		var manager = projectPaintManager.remove(project);
+		if(manager != null)
+			manager.close();
 	}
 
 	public JPanel getBlankPanel()
@@ -77,57 +164,7 @@ public class PaintExtension extends BaseExtension
 		return panel;
 	}
 
-	/*
-	 * Happens when StencylWorks closes.
-	 * 
-	 * Usually used to save things out.
-	 */
-	@Override
-	public void onDestroy()
-	{
-	}
-
-	/*
-	 * Happens when a game is saved.
-	 */
-	@Override
-	public void onGameSave(Game game)
-	{
-		Fonts.get().saveChanges(fontsFile);
-		Images.get().saveChanges(imagesFile);
-		
-		MainEditor.get().gameSaved();
-	}
-
-	/*
-	 * Happens when the user runs, previews or exports the game.
-	 */
-	@Override
-	public void onGameBuild(Game game)
-	{
-		onGameSave(game);
-	}
-
-	/*
-	 * Happens when a game is opened.
-	 */
-	@Override
-	public void onGameOpened(Game game)
-	{
-		extras = new File(Locations.getGameLocation(game) + "extras/" + getManifest().id);
-		extras.mkdirs();
-		
-		if(extras.list().length == 0)
-			loadDefaults();
-		
-		fontsFile = new File(extras, "fonts");
-		imagesFile = new File(extras, "images");
-		
-		Fonts.get().load(fontsFile);
-		Images.get().load(imagesFile);
-	}
-
-	private void loadDefaults()
+	private static void loadDefaults(File extras)
 	{
 		File f;
 		try
@@ -136,18 +173,18 @@ public class PaintExtension extends BaseExtension
 			f.getParentFile().mkdirs();
 			if (!f.exists())
 				FileHelper.writeStringToFile(f.getAbsolutePath(), res.loadText("defaults/Default Font.fnt"));
-	
+
 			f = new File(extras, "fonts/Default Font.png");
 			if (!f.exists())
 				FileHelper.writeToPNG(f.getAbsolutePath(),
 						res.loadImage("defaults/Default Font.png"));
-	
+
 			f = new File(extras, "images/Default Window.png");
 			f.getParentFile().mkdirs();
 			if (!f.exists())
 				FileHelper.writeToPNG(f.getAbsolutePath(),
 						res.loadImage("defaults/Default Window.png"));
-	
+
 			f = new File(extras, "images/Pointer.png");
 			if (!f.exists())
 				FileHelper.writeToPNG(f.getAbsolutePath(),
@@ -157,54 +194,5 @@ public class PaintExtension extends BaseExtension
 		{
 			e.printStackTrace();
 		}
-	}
-
-	/*
-	 * Happens when a game is closed.
-	 */
-	@Override
-	public void onGameClosed(Game game)
-	{
-		super.onGameClosed(game);
-
-		Fonts.get().unload();
-		Images.get().unload();
-
-		MainEditor.disposePages();
-	}
-
-	/*
-	 * Happens when the user requests the Options dialog for your extension.
-	 * 
-	 * You need to provide the form. We wrap it in a dialog.
-	 */
-	@Override
-	public OptionsPanel onOptions()
-	{
-		return null;
-	}
-
-	@Override
-	protected boolean hasOptions()
-	{
-		return false;
-	}
-	
-	/*
-	 * Happens when the extension is first installed.
-	 */
-	@Override
-	public void onInstall()
-	{
-	}
-
-	/*
-	 * Happens when the extension is uninstalled.
-	 * 
-	 * Clean up files.
-	 */
-	@Override
-	public void onUninstall()
-	{
 	}
 }
