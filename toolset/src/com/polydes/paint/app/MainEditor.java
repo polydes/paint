@@ -15,14 +15,10 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
-import com.polydes.paint.PaintExtension.PaintManager;
+import com.polydes.paint.ProjectPaintManager;
 import com.polydes.paint.app.pages.FontsPage;
 import com.polydes.paint.app.pages.ImagesPage;
 
-import com.polydes.paint.data.stores.FontStore;
-import com.polydes.paint.data.stores.Fonts;
-import com.polydes.paint.data.stores.ImageStore;
-import com.polydes.paint.data.stores.Images;
 import stencyl.app.comp.StatusBar;
 import stencyl.app.ext.res.AppResourceLoader;
 import stencyl.app.ext.res.AppResources;
@@ -35,7 +31,7 @@ public class MainEditor extends JPanel
 	private static final int BUTTON_WIDTH = 70;
 	private static final int BUTTON_HEIGHT = 57;
 
-	public final PaintManager manager;
+	public final ProjectPaintManager manager;
 
 	private ButtonGroup buttonGroup;
 	private JToggleButton fontsButton;
@@ -50,7 +46,7 @@ public class MainEditor extends JPanel
 	
 	public static final Color SIDEBAR_COLOR = new Color(62, 62, 62);
 
-	public MainEditor(PaintManager manager)
+	public MainEditor(ProjectPaintManager manager)
 	{
 		super(new BorderLayout());
 
